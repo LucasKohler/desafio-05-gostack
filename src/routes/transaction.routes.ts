@@ -1,44 +1,44 @@
-import { Router } from 'express'
+import { Router } from 'express';
 
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import CreateTransactionService from '../services/CreateTransactionService';
 
-const transactionRouter = Router()
+const transactionRouter = Router();
 
 const transactionsRepository = new TransactionsRepository();
 
 transactionRouter.get('/', (request, response) => {
   try {
-    const transactions = transactionsRepository.all()
-    const balance = transactionsRepository.getBalance()
+    const transactions = transactionsRepository.all();
+    const balance = transactionsRepository.getBalance();
 
     return response.json({
       transactions,
-      balance
-    })
+      balance,
+    });
   } catch (err) {
-    return response.status(400).json({ error: err.message })
+    return response.status(400).json({ error: err.message });
   }
-})
+});
 
 transactionRouter.post('/', (request, response) => {
   try {
-    const { title, value, type } = request.body
+    const { title, value, type } = request.body;
 
     const createTransaction = new CreateTransactionService(
-      transactionsRepository
-    )
+      transactionsRepository,
+    );
 
     const transaction = createTransaction.execute({
       title,
       value,
-      type
-    })
+      type,
+    });
 
-    return response.json(transaction)
+    return response.json(transaction);
   } catch (err) {
-    return response.status(400).json({ error: err.message })
+    return response.status(400).json({ error: err.message });
   }
-})
+});
 
-export default transactionRouter
+export default transactionRouter;
